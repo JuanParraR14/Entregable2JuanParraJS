@@ -67,7 +67,7 @@ const productos = [
    },
    {
       id: 10,
-      nombre: "Menta Helada 100 unidades",
+      nombre: "Menta Helada 100 Unidades",
       precio: 8950,
       categoria: "Confitería",
    },
@@ -153,6 +153,7 @@ class CarritoDeCompras {
                      <span class="contador-productos" id="cuenta-de-producto-por-id${id}"></span>${nombre}
                   </p>
                   <p>$COP ${precio}</p>
+                  <hr class="divider my-4" />
                </div>      
             `;  
          }
