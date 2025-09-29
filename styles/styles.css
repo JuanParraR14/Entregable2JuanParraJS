@@ -16,6 +16,11 @@ body {
   color: #333;
 }
 
+header {
+  background-color: #faa307;
+  color: #6a040f;
+}
+
 header img {
   height: 100px;
 }

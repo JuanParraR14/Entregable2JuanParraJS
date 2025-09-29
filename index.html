@@ -16,25 +16,22 @@
             <a href="#"><img src="./assets/Reshipi Logo.png" alt="Logo de Reshipi"></a>
             <div>
                <div>
-                  <button type="button"><span>COP$</span></button>
+                  <button id="btn-carrito" type="button"><span id="mostrar-esconder-carrito">Mostrar</span> Carrito</button>
                </div>
-               <div>
-                  <button type="button"><span>Mostrar</span> Carrito</button>
-               </div>
-               <div>
-                  <div></div>
-                  <p>Subtotal: <span>$0</span></p>
-                  <p>Impuestos (19%): <span>$0</span></p>
-                  <p>Total <span>$0</span></p>
-                  <p>Número de Items en el Carrito <span>0</span></p>
-                  <button type="button">Limpiar Carrito</button>
+               <div id="carrito">
+                  <div id="contenedor-productos"></div>
+                  <p>Subtotal: <span id="subtotal">$0</span></p>
+                  <p>Impuestos (19%): <span id="impuestos">$0</span></p>
+                  <p>Total <span id="total">$0</span></p>
+                  <p>Número de Items en el Carrito <span id="items-totales">0</span></p>
+                  <button id="limpiar-carrito" type="button">Limpiar Carrito</button>
                </div>
             </div>
          </div>
       </nav>
    </header>
    <main>
-      <div></div>
+      <div id="contenedor-producto"></div>
    </main>
    <footer></footer>
    <script src="./js/main.js"></script>      
