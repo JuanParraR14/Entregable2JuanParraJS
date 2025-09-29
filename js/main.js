@@ -123,28 +123,52 @@ class CarritoDeCompras {
       this.tazaImpuestos = 19;
    }
 
-   añadirObjeto(id, productos) {
-      const producto = productos.find((objeto) => objeto.id === id);
-      const { nombre, precio } = producto;
-      this.objetos.push(producto);
+   guardarEnStorage() {
+      localStorage.setItem("carrito", JSON.stringify(this.objetos));
+   }
 
+   cargarDesdeStorage() {
+      const data = localStorage.getItem("carrito");
+      if (data) {
+         this.objetos = JSON.parse(data);
+         this.reconstruirCarrito();
+         carritoTotalItems.textContent = this.obtenerTotal();
+         this.calcularTotal();
+      }
+   }
+
+   reconstruirCarrito() {
+      contenedorProductos.innerHTML = "";
       const cuentaTotalPorProducto = {};
       this.objetos.forEach((elemento) => {
          cuentaTotalPorProducto[elemento.id] = (cuentaTotalPorProducto[elemento.id] || 0) + 1;
-      })
+      });
 
-      const cuentaActualDeProducto = cuentaTotalPorProducto[producto.id];
-      const spanCuentaActualDeProducto = document.getElementById(`cuenta-de-producto-por-id${id}`);
+      this.objetos.forEach(({ id, nombre, precio }) => {
+         if(!document.getElementById(`elemento${id}`)) {
+            contenedorProductos.innerHTML += 
+            `
+               <div id="elemento${id}" class="producto">
+                  <p>
+                     <span class="contador-productos" id="cuenta-de-producto-por-id${id}"></span>${nombre}
+                  </p>
+                  <p>$COP ${precio}</p>
+               </div>      
+            `;  
+         }
+         const spanCuentaActualDeProducto = document.getElementById(`cuenta-de-producto-por-id${id}`);
+         spanCuentaActualDeProducto.textContent = cuentaTotalPorProducto[id] > 1 ? `${cuentaTotalPorProducto[id]}x ` : "";
+      });
+   }
 
-      cuentaActualDeProducto > 1 ? spanCuentaActualDeProducto.textContent = `${cuentaActualDeProducto}x ` : contenedorProductos.innerHTML += 
-      `
-         <div id="elemto${id}" class="producto">
-            <p>
-               <span class="contador-productos" id="cuenta-de-producto-por-id${id}"></span>${nombre}
-            </p>
-            <p>$COP ${precio}</p>
-         </div>      
-      `;      
+   añadirObjeto(id, productos) {
+      const producto = productos.find((objeto) => objeto.id === id);
+      this.objetos.push(producto);
+      
+      this.reconstruirCarrito();
+      carritoTotalItems.textContent = this.obtenerTotal();
+      this.calcularTotal();
+      this.guardarEnStorage();
    }
 
    obtenerTotal() {
@@ -152,13 +176,14 @@ class CarritoDeCompras {
    }
 
    limpiarCarro() {
-         this.objetos = [];
-         this.total = 0;
-         contenedorProductos.innerHTML = "";
-         carritoSubTotal.textContent = `$0`;
-         carritoImpuestos.textContent = `$0`;
-         carritoTotal.textContent = `$0`;
-         carritoTotalItems.textContent = 0;
+      this.objetos = [];
+      this.total = 0;
+      contenedorProductos.innerHTML = "";
+      carritoSubTotal.textContent = `$COP 0`;
+      carritoImpuestos.textContent = `$COP 0`;
+      carritoTotal.textContent = `$COP 0`;
+      carritoTotalItems.textContent = 0;
+      this.guardarEnStorage();
    }
    
    calcularImpuestos(monto) {
@@ -177,15 +202,14 @@ class CarritoDeCompras {
 };
 
 const carro = new CarritoDeCompras();
-const botonesAñadirAlCarrito = document.getElementsByClassName("btn-añadir-al-carrito");
+carro.cargarDesdeStorage();
 
+const botonesAñadirAlCarrito = document.getElementsByClassName("btn-añadir-al-carrito");
 [...botonesAñadirAlCarrito].forEach(
    (boton) => {
       boton.addEventListener("click", (event) => {
          carro.añadirObjeto(Number(event.target.id), productos);
-         carritoTotalItems.textContent = carro.obtenerTotal();
-         carro.calcularTotal();
-      })
+      });
    }
 );
 
